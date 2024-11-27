@@ -5,8 +5,6 @@ import confetti from 'canvas-confetti'
 
 import { useToast } from '@/composables'
 
-// todo 优化（爆炸展示所有地雷） + 样式优化
-
 const directions = [
   [1, 1],
   [1, 0],
