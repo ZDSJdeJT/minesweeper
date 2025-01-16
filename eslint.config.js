@@ -1,9 +1,9 @@
-import globals from 'globals'
-import pluginJs from '@eslint/js'
-import tseslint from 'typescript-eslint'
-import pluginVue from 'eslint-plugin-vue'
-import eslintConfigPrettier from 'eslint-config-prettier'
-import progress from 'eslint-plugin-file-progress'
+import pluginJs from '@eslint/js';
+import eslintConfigPrettier from 'eslint-config-prettier';
+import progress from 'eslint-plugin-file-progress';
+import pluginVue from 'eslint-plugin-vue';
+import globals from 'globals';
+import tseslint from 'typescript-eslint';
 
 export default [
   { files: ['**/*.{js,mjs,cjs,ts,vue}'] },
@@ -15,7 +15,7 @@ export default [
   progress.configs.recommended,
   {
     files: ['**/*.vue'],
-    languageOptions: { parserOptions: { parser: tseslint.parser } }
+    languageOptions: { parserOptions: { parser: tseslint.parser } },
   },
-  { ignores: ['dist/*', 'public/*'] }
-]
+  { ignores: ['dist/*', 'public/*'] },
+];

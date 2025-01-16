@@ -1,9 +1,9 @@
-import { ref } from 'vue'
-import { useStorage } from '@vueuse/core'
-import { z } from 'zod'
-import confetti from 'canvas-confetti'
+import { ref } from 'vue';
+import { useStorage } from '@vueuse/core';
+import confetti from 'canvas-confetti';
+import { z } from 'zod';
 
-import { useToast } from '@/composables'
+import { useToast } from '@/composables';
 
 const directions = [
   [1, 1],
@@ -13,13 +13,13 @@ const directions = [
   [-1, -1],
   [-1, 0],
   [-1, 1],
-  [0, 1]
-]
+  [0, 1],
+];
 
 enum GameStatus {
   Playing,
   Won,
-  Lost
+  Lost,
 }
 
 enum BlockStatus {
@@ -28,18 +28,18 @@ enum BlockStatus {
   // 是否被“翻开”
   Revealed,
   // 是否被插旗
-  Flagged
+  Flagged,
 }
 
 interface Block {
   // 是否是地雷
-  mine: boolean
+  mine: boolean;
   // 状态
-  status: BlockStatus
+  status: BlockStatus;
   // 文本
-  text: string
+  text: string;
   // 类名
-  class: string
+  class: string;
 }
 
 const GameOptionsSchema = z.object({
@@ -70,7 +70,7 @@ const GameOptionsSchema = z.object({
       'bg-orange-500/30',
       'bg-yellow-500/30',
       'bg-pink-500/30',
-      'bg-teal-500/30'
+      'bg-teal-500/30',
     ]),
   numberText: z
     .array(z.string())
@@ -85,8 +85,8 @@ const GameOptionsSchema = z.object({
     .args()
     .returns(z.void())
     .default(() => () => {
-      const toast = useToast()
-      toast('Game Over 🔚', { type: 'error' })
+      const toast = useToast();
+      toast('Game Over 🔚', { type: 'error' });
     }),
   onWon: z
     .function()
@@ -94,18 +94,18 @@ const GameOptionsSchema = z.object({
     .returns(z.void())
     .optional()
     .default(() => () => {
-      const toast = useToast()
-      toast('You Won 🎉', { type: 'success' })
+      const toast = useToast();
+      toast('You Won 🎉', { type: 'success' });
       confetti({
         particleCount: 100,
         spread: 70,
-        origin: { y: 0.6 }
-      })
-    })
-})
+        origin: { y: 0.6 },
+      });
+    }),
+});
 
 export const useMinesweeperGame = (
-  options: Partial<z.infer<typeof GameOptionsSchema>> = {}
+  options: Partial<z.infer<typeof GameOptionsSchema>> = {},
 ) => {
   const {
     key,
@@ -121,8 +121,8 @@ export const useMinesweeperGame = (
     flagText,
     flagClass,
     onLost,
-    onWon
-  } = GameOptionsSchema.parse(options)
+    onWon,
+  } = GameOptionsSchema.parse(options);
 
   const initBoard = (): Block[][] =>
     Array.from({ length: height }, (_, y) =>
@@ -132,32 +132,32 @@ export const useMinesweeperGame = (
         mine: false,
         status: BlockStatus.Unrevealed,
         text: blockText,
-        class: blockClass
-      }))
-    )
+        class: blockClass,
+      })),
+    );
 
-  const board = ref<Block[][]>(initBoard())
-  useStorage(`${key}Board`, board)
+  const board = ref<Block[][]>(initBoard());
+  useStorage(`${key}Board`, board);
 
-  const status = ref<GameStatus>(GameStatus.Playing)
-  useStorage(`${key}Status`, status)
+  const status = ref<GameStatus>(GameStatus.Playing);
+  useStorage(`${key}Status`, status);
 
   const minesGenerated = (): boolean => {
     return !board.value
       .flat()
-      .every((block) => block.status === BlockStatus.Unrevealed)
-  }
+      .every((block) => block.status === BlockStatus.Unrevealed);
+  };
 
   const generateMines = (initialX: number, initialY: number): void => {
     board.value = board.value.map((row, y) =>
       row.map((block, x) => ({
         ...block,
         ...((x !== initialX || y !== initialY) && {
-          mine: Math.random() < mineProbability
-        })
-      }))
-    )
-  }
+          mine: Math.random() < mineProbability,
+        }),
+      })),
+    );
+  };
 
   const revealAllMineBlock = () => {
     board.value = board.value.map((row, y) =>
@@ -166,125 +166,125 @@ export const useMinesweeperGame = (
         ...(block.mine && {
           status: BlockStatus.Revealed,
           text: boomText,
-          class: `${blockClass} ${boomClass}`
-        })
-      }))
-    )
-  }
+          class: `${blockClass} ${boomClass}`,
+        }),
+      })),
+    );
+  };
 
   const lost = () => {
-    revealAllMineBlock()
-    status.value = GameStatus.Lost
-    onLost()
-  }
+    revealAllMineBlock();
+    status.value = GameStatus.Lost;
+    onLost();
+  };
 
   const won = () => {
-    status.value = GameStatus.Won
-    onWon()
-  }
+    status.value = GameStatus.Won;
+    onWon();
+  };
 
   const checkIsWon = (): void => {
     if (status.value !== GameStatus.Playing) {
-      return
+      return;
     }
-    const mineBlocks: Block[] = []
-    const otherBlocks: Block[] = []
+    const mineBlocks: Block[] = [];
+    const otherBlocks: Block[] = [];
     board.value.flat().forEach((block) => {
       if (block.mine) {
-        mineBlocks.push(block)
-        return
+        mineBlocks.push(block);
+        return;
       }
-      otherBlocks.push(block)
-    })
+      otherBlocks.push(block);
+    });
     if (
       otherBlocks.every((block) => block.status === BlockStatus.Revealed) ||
       (mineBlocks.every((block) => block.status === BlockStatus.Flagged) &&
         otherBlocks.every((block) => block.status !== BlockStatus.Flagged))
     ) {
-      won()
+      won();
     }
-  }
+  };
 
   const onReveal = (x: number, y: number): void => {
     if (
       status.value !== GameStatus.Playing ||
       board.value[y][x].status !== BlockStatus.Unrevealed
     ) {
-      return
+      return;
     }
     if (!minesGenerated()) {
-      generateMines(x, y)
+      generateMines(x, y);
     }
     if (board.value[y][x].mine) {
-      lost()
-      return
+      lost();
+      return;
     }
-    const queue: number[][] = [[x, y]]
+    const queue: number[][] = [[x, y]];
     do {
-      const adjacentBlockPositions: number[][] = []
-      let adjacentMines = 0
+      const adjacentBlockPositions: number[][] = [];
+      let adjacentMines = 0;
       directions.forEach(([dx, dy]) => {
-        const position = [queue[0][0] + dx, queue[0][1] + dy]
-        const block = board.value[position[1]]?.[position[0]]
+        const position = [queue[0][0] + dx, queue[0][1] + dy];
+        const block = board.value[position[1]]?.[position[0]];
         if (block) {
-          adjacentBlockPositions.push(position)
+          adjacentBlockPositions.push(position);
           if (block.mine) {
-            adjacentMines++
+            adjacentMines++;
           }
         }
-      })
+      });
       board.value[queue[0][1]][queue[0][0]] = {
         ...board.value[queue[0][1]][queue[0][0]],
         status: BlockStatus.Revealed,
         text: numberText[adjacentMines],
-        class: `${blockClass} ${numberClass[adjacentMines]}`
-      }
+        class: `${blockClass} ${numberClass[adjacentMines]}`,
+      };
       if (adjacentMines === 0) {
         queue.push(
           ...adjacentBlockPositions.filter(
             (position) =>
               board.value[position[1]][position[0]].status ===
-              BlockStatus.Unrevealed
-          )
-        )
+              BlockStatus.Unrevealed,
+          ),
+        );
       }
-      queue.shift()
-    } while (queue.length > 0)
-    checkIsWon()
-  }
+      queue.shift();
+    } while (queue.length > 0);
+    checkIsWon();
+  };
 
   const onFlag = (x: number, y: number): void => {
     if (
       status.value !== GameStatus.Playing ||
       board.value[y][x].status === BlockStatus.Revealed
     ) {
-      return
+      return;
     }
     if (!minesGenerated()) {
-      generateMines(x, y)
+      generateMines(x, y);
     }
     if (board.value[y][x].status === BlockStatus.Unrevealed) {
       board.value[y][x] = {
         ...board.value[y][x],
         status: BlockStatus.Flagged,
         text: flagText,
-        class: `${blockClass} ${flagClass}`
-      }
+        class: `${blockClass} ${flagClass}`,
+      };
     } else {
       board.value[y][x] = {
         ...board.value[y][x],
         status: BlockStatus.Unrevealed,
         text: blockText,
-        class: blockClass
-      }
+        class: blockClass,
+      };
     }
-    checkIsWon()
-  }
+    checkIsWon();
+  };
 
   const onReset = (): void => {
-    board.value = initBoard()
-    status.value = GameStatus.Playing
-  }
+    board.value = initBoard();
+    status.value = GameStatus.Playing;
+  };
 
-  return { board, onReveal, onFlag, onReset }
-}
+  return { board, onReveal, onFlag, onReset };
+};

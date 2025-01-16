@@ -1,9 +1,9 @@
 <script setup lang="ts">
-import { vOnLongPress } from '@vueuse/components'
+import { vOnLongPress } from '@vueuse/components';
 
-import { useMinesweeperGame } from '@/composables'
+import { useMinesweeperGame } from '@/composables';
 
-const { board, onReveal, onFlag, onReset } = useMinesweeperGame()
+const { board, onReveal, onFlag, onReset } = useMinesweeperGame();
 </script>
 
 <template>
@@ -43,7 +43,7 @@ const { board, onReveal, onFlag, onReset } = useMinesweeperGame()
         :class="block.class"
         v-on-long-press.prevent="
           () => {
-            onFlag(x, y)
+            onFlag(x, y);
           }
         "
         @dblclick="onReveal(x, y)"

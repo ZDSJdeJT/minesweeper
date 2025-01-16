@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import ModeToggle from '@/components/ModeToggle.vue'
-import MinesweeperGame from '@/components/MinesweeperGame.vue'
+import MinesweeperGame from '@/components/MinesweeperGame.vue';
+import ModeToggle from '@/components/ModeToggle.vue';
 </script>
 
 <template>
