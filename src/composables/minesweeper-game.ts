@@ -1,9 +1,8 @@
 import { ref } from 'vue';
 import { useStorage } from '@vueuse/core';
-import confetti from 'canvas-confetti';
 import { z } from 'zod';
 
-import { useToast } from '@/composables';
+import { useConfetti, useToast } from '@/composables';
 
 const directions = [
   [1, 1],
@@ -96,6 +95,8 @@ const GameOptionsSchema = z.object({
     .default(() => () => {
       const toast = useToast();
       toast('You Won 🎉', { type: 'success' });
+
+      const confetti = useConfetti();
       confetti({
         particleCount: 100,
         spread: 70,
