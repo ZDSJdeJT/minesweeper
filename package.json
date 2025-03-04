@@ -2,7 +2,7 @@
   "name": "minesweeper",
   "version": "0.1.0",
   "private": true,
-  "author": "Echo",
+  "author": "Echo <zdsjdejt@qq.com>",
   "type": "module",
   "scripts": {
     "dev": "vite",
