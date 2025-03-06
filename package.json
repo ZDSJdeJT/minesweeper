@@ -9,7 +9,7 @@
     "build": "vue-tsc -b && vite build",
     "preview": "vite preview",
     "lint": "eslint .",
-    "format": "prettier . \"!public/**\" --write"
+    "format": "prettier . --write"
   },
   "dependencies": {
     "@vueuse/components": "^11.2.0",

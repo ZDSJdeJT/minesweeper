@@ -13,7 +13,21 @@
       "type": "image/png"
     }
   ],
-  "theme_color": "#ffffff",
-  "background_color": "#ffffff",
-  "display": "standalone"
+  "screenshots": [
+    {
+      "src": "/screenshots/desktop-home.png",
+      "sizes": "1908x891",
+      "form_factor": "wide",
+      "label": "Desktop view showing weekly meal calendar"
+    },
+    {
+      "src": "/screenshots/mobile-home.png",
+      "sizes": "657x1168",
+      "form_factor": "narrow",
+      "label": "Mobile view showing weekly meal calendar"
+    }
+  ],
+  "display": "standalone",
+  "description": "A classic Minesweeper game built with Vue 3 and styled using Tailwind CSS.",
+  "start_url": "/"
 }
