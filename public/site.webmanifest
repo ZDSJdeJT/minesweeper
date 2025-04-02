@@ -16,13 +16,13 @@
   "screenshots": [
     {
       "src": "/screenshots/desktop-home.png",
-      "sizes": "1908x891",
+      "sizes": "1920x1080",
       "form_factor": "wide",
       "label": "Desktop view showing weekly meal calendar"
     },
     {
       "src": "/screenshots/mobile-home.png",
-      "sizes": "657x1168",
+      "sizes": "1080x1920",
       "form_factor": "narrow",
       "label": "Mobile view showing weekly meal calendar"
     }
