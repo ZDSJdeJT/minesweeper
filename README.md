@@ -6,4 +6,4 @@ Learn more about the recommended Project Setup and IDE Support in the [Vue Docs 
 
 # Screenshots
 
-![Play](/screenshots/play.gif?raw=true&sanitize=true 'Play')
+![Play](/screenshots/play.gif?raw=true&sanitize=true)
